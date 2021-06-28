@@ -6,13 +6,14 @@ import matplotlib.pyplot as plt
 import matplotlib.pylab as pylab
 pylab.rcParams['figure.figsize'] = 16, 12
 
-image = Image.open('E:/Farmland/farm63.png')
-im = Image.open('E:/Farmland/farm63.png')
+### Loads in the image
+image = Image.open('E:/Farmland/farm27.png')
+im = Image.open('E:/Farmland/farm27.png')
 width, height = im.size
 image = np.array(image)
 original_shape = image.shape
 
-
+### Collecting the RGB and location of each pixel.
 orig_pixel_map = im.load()
 i,j = 0,0 
 pixels =[]
@@ -30,13 +31,15 @@ for i in range(height):
     i = i+1
 arr = np.array(pixels)
 
-# Flatten image.
+### Flattening the image.
 X = np.reshape(image, [-1, 3])
 plt.imshow(image)
 
+### Setting the Bandwidth
 bandwidth = estimate_bandwidth(X, quantile=0.1, n_samples=100)
 print(bandwidth)
 
+### Carrying out mean shift on the collected pixels.
 ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
 ms.fit(arr)
 cluster_centers = ms.cluster_centers_
@@ -58,13 +61,14 @@ plt.figure(2)
 plt.subplot(1, 2, 1)
 plt.imshow(image)
 plt.axis('off')
+plt.title('Original Image')
 plt.subplot(1, 2, 2)
 plt.imshow(segmented_image)
 plt.axis('off')
+plt.title('Image After Mean Shift')
 
-#Plotting the centers of the clusters
-
-
+### Plotting the centers of the clusters
+## Splitting the collected RGB values.
 x = cluster_centers[:,0]
 y = cluster_centers[:,1]
 z = cluster_centers[:,2]
@@ -72,6 +76,7 @@ x1 = arr[:,0]
 y1 = arr[:,1]
 z1 = arr[:,2]
 
+### Plotting a 2D graph of the clusters.
 plt.figure()
 plt.clf()
 colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
@@ -82,4 +87,11 @@ for k, col in zip(range(n_clusters_), colors):
     plt.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col,
              markeredgecolor='k', markersize=14)
 plt.title('Estimated number of clusters: %d' % n_clusters_)
+plt.show()
+
+### Plotting a 3D graph of the clusters.
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.scatter(x1,y1,z1, color = 'r', alpha = 0.5)
+ax.scatter(x,y,z,c = 'b')
 plt.show()
