@@ -95,3 +95,8 @@ ax = fig.add_subplot(111, projection='3d')
 ax.scatter(x1,y1,z1, color = 'r', alpha = 0.5)
 ax.scatter(x,y,z,c = 'b')
 plt.show()
+
+### Code taken from:
+    # http://www.chioka.in/meanshift-algorithm-for-the-rest-of-us-python/
+    # https://scikit-learn.org/stable/auto_examples/cluster/plot_mean_shift.html#sphx-glr-auto-examples-cluster-plot-mean-shift-py
+    # Mostly used for the graphs.
